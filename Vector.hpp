@@ -33,21 +33,3 @@ public:
     void print(bool newLine = false);
     
 };
-    template <typename T>
-    const std::string Vector<T>::B_W = "\033[1;37m";
-
-    template <typename T>
-    const std::string Vector<T>::B_T = "\033[1;36m";
-
-    template <typename T>
-    const std::string Vector<T>::B_R = "\033[1;31m";
-
-    template <typename T>
-    const std::string Vector<T>::R_T = "\033[0m";
-
-template <typename T>
-Vector<T>::Vector() {
-    std::cout << "Making Vector\n";
-    numOfEle = 0;
-    arr = new T[0];
-}
