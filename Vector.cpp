@@ -1,4 +1,4 @@
-#include <iostream>
+#include "./Vector.hpp"
 
 template <typename T>
 Vector<T>::~Vector() {  delete [] arr; }
