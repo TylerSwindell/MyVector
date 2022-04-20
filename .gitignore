@@ -35,5 +35,5 @@
 # Personal Preferences
 .vscode
 .DS_Store
-./out/*
-./unitTest.cpp
+unitTest.cpp
+out/

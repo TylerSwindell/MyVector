@@ -1,17 +1,22 @@
 #include <iostream>
 
+template <typename T>
 class Vector {
 private:
-    size_t 
-        cap,
-        numOfEle;
-    size_t* arr = nullptr;
+    size_t numOfEle;
+    T* arr;
 
-    // Resets all styling attributes
-    static std::string B_W;
-    static std::string B_T;
-    static std::string R_T;
+    
+    // Bold White
+    const static std::string B_W;         
+    // Bold Teal
+    const static std::string B_T;
+    // Bold Red
+    const static std::string B_R;
+    // Reset Text
+    const static std::string R_T;
 
+    void resize(int ind);
 
 public:
     Vector();
@@ -19,67 +24,59 @@ public:
     
     size_t size();
     size_t index();
-    size_t get(size_t index);
+    T get(size_t index);
 
-    void push(size_t element);
+    void push(const T &element);
     void pop();
+    void remove(size_t index);
     
-    void print();
+    void print(bool newLine = false);
     
 };
+    template <typename T>
+    const std::string Vector<T>::B_W = "\033[1;37m";
 
-// Bold Text Colors
-    std::string 
-        Vector::B_W = "\033[1;37m",
-        Vector::B_T = "\033[1;36m",
+    template <typename T>
+    const std::string Vector<T>::B_T = "\033[1;36m";
 
-// Resets all styling attributes
-        Vector::R_T = "\033[0m";
+    template <typename T>
+    const std::string Vector<T>::B_R = "\033[1;31m";
 
-Vector::Vector() {
-    cap = 0;
+    template <typename T>
+    const std::string Vector<T>::R_T = "\033[0m";
+
+template <typename T>
+Vector<T>::Vector() {
+    std::cout << "Making Vector\n";
     numOfEle = 0;
-    arr = new size_t[cap];
+    arr = new T[0];
 }
 
-Vector::~Vector() { delete [] arr; }
+template <typename T>
+Vector<T>::~Vector() {  delete [] arr; }
 
-size_t Vector::size() { return numOfEle; }
-size_t Vector::index() { return numOfEle-1; }
+template <typename T>
+// Returns size of Vector array
+size_t Vector<T>::size() { return numOfEle; }
 
-void Vector::push(size_t element) {
+template <typename T>
+// Returns last index number of the vector
+size_t Vector<T>::index() { return this->size()-1; }
 
-    numOfEle++;
-
-    size_t* tempArr = new size_t[numOfEle];
-
-    if (numOfEle > 0) 
-        for (size_t i = 0; i < numOfEle-1; i++) 
-            tempArr[i] = arr[i];
-
-    // Adds the new item to the tempInv storage
-    tempArr[numOfEle-1] = element;
-
-    // Deletes the current grades pointer data
-    delete[] arr;
-
-    // Stores the tempGrades data in grades pointer
-    arr = tempArr;
-    tempArr = nullptr;
-}
-
-void Vector::pop() {
-    // Incriments size for tempGrades[] creation
-    numOfEle -= 1;
+template <typename T>
+// Used in multiple methods to resize the main pointer
+// ie push() & pop()
+void Vector<T>::resize(int ind) {
+    numOfEle += ind;
 
     // Creates new array for temp item storage
-    size_t* tempArr = new size_t[numOfEle];
+    T* tempArr = new T[numOfEle];
 
     // Fills tempInv with the previously entered items
-    for (uint i = 0; i < numOfEle; i++) 
-        tempArr[i] = arr[i];
+    if (numOfEle > 1 ) 
+        for (size_t i = 0; i < numOfEle; i++) 
+            tempArr[i] = arr[i];
 
-    // Deletes the current grades pointer data
     delete[] arr;
 
     // Stores the tempGrades data in grades pointer
@@ -87,14 +84,38 @@ void Vector::pop() {
     tempArr = nullptr;
 }
 
-size_t Vector::get(size_t index) { return arr[index]; }
+template <typename T>
+// Adds an item to the end of the Vector
+void Vector<T>::push(const T &element) {
+    this->resize(1);
 
-void Vector::print() { 
+    // Adds the new item to the tempInv storage
+    this->arr[numOfEle-1] = element;
+}
+
+template <typename T>
+// Removes last index from vector
+void Vector<T>::pop() { this->resize(-1); }
+
+template <typename T>
+// Removes last index from vector
+void Vector<T>::remove(size_t index) { 
+    this->resize(-1); 
+}
+
+template <typename T>
+// Returns value from specific index location
+T Vector<T>::get(size_t index) { return arr[index]; }
+
+template <typename T>
+// Outputs the content of the Vector to the terminal
+void Vector<T>::print(bool newLine) { 
     std::cout << B_W << "[ ";
     for(size_t i = 0; i < numOfEle; i++) {
         std::cout << B_T << arr[i]; 
         if (i < numOfEle-1) 
             std::cout << B_W << ", ";
     }
-    std::cout << B_W << " ]\n" << R_T;
+    std::cout << B_W << " ]" << R_T;
+    if (newLine) std::cout << '\n';
 }
